@@ -72,7 +72,7 @@ python cli.py --input "C:\Hearthstone\Data" --output ./my_assets --image all
 
 ### 安装项目
 ```bash
-pip install .
+uv install .
 ```
 
 ### 执行构建命令

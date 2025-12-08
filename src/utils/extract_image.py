@@ -1,8 +1,7 @@
 import logging
-from pathlib import Path
 from typing import Callable
 
-import UnityPy.classes
+from UnityPy.classes import PPtr
 
 from unity3d.common import CommonUnity3d
 
@@ -13,7 +12,7 @@ def get_guid(source: str) -> str | None:
     return None
 
 
-def extract_asset(context, base_guid: str, save_callback: Callable[[UnityPy.classes.PPtr, str], None]):
+def extract_asset(context, base_guid: str, save_callback: Callable[[PPtr, str], None]):
     for locale in context.locale_options:
         guid = base_guid
         bundle = context.asset_manifest.base_assets_catalog[guid]
@@ -30,7 +29,7 @@ def extract_image(context, guid: str, name: str):
         logging.warning(f'Card({context.card_id}) 不存在 {name} 版本的卡图')
         return
     
-    def save_image(obj: UnityPy.classes.PPtr, locale: str):
+    def save_image(obj: PPtr, locale: str):
         data = obj.deref_parse_as_object()
         save_dir = context.output / context.card_id / 'image'
         save_dir.mkdir(parents=True, exist_ok=True)

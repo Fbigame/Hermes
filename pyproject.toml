@@ -4,19 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hearthstone-card-asset-extractor"
-version = "0.1.0"
+version = "0.1.1"
 requires-python = ">=3.12"
 
 dependencies = [
-    "UnityPy~=1.24.1",
+    "UnityPy>=1.24.1",
+    "nuitka>=2.8.9",
 ]
+
 
 [project.scripts]
 hearth-asset = "cli:main"
 build = "build_script:build"
-
-[project.optional-dependencies]
-build = [
-    "PyInstaller>=6.17.0",
-]
-

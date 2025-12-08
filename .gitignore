@@ -5,3 +5,7 @@
 /output/
 __pycache__/
 *.egg-info/
+/cli.dist/
+/cli.onefile-build/
+/cli.build/
+*.exe

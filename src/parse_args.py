@@ -90,7 +90,7 @@ def parse_args() -> HearthstoneExtractContext:
     parser = argparse.ArgumentParser(description="Hearthstone card asset extractor")
     
     # Add help and version handling
-    parser.add_argument('-v', '--version', action='version', version='%(prog)s 0.1.0')
+    parser.add_argument('-v', '--version', action='version', version='%(prog)s 0.1.1')
     
     # 输入参数
     parser.add_argument(
@@ -151,12 +151,13 @@ def parse_args() -> HearthstoneExtractContext:
         default="none"
     )
     
-    args = parser.parse_args()
-    
     # 如果没有传任何参数，打印帮助并退出
-    if len(sys.argv) == 0:
+    if len(sys.argv) == 1:
         parser.print_help()
         sys.exit(-1)
+    args = parser.parse_args()
+    
+
     if not args.input.exists() or not args.input.is_dir():
         parser.error(f"Input folder '{args.input}' does not exist or is not a directory.")
     

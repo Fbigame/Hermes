@@ -1,12 +1,10 @@
 import json
 import logging
 from pathlib import Path
-from typing import Callable
-
-import UnityPy.classes
-
-from unity3d.common import CommonUnity3d, CardSoundSpellReturnDict
+from typing import Callable, Any
+from UnityPy.classes import PPtr
 from typed_dicts.card_def import CardDefEffectDefDict
+from unity3d.common import CommonUnity3d, CardSoundSpellReturnDict
 
 
 def get_guid(source: str) -> str | None:
@@ -36,7 +34,7 @@ def parse_audio_struct(context, effect_def: CardDefEffectDefDict):
     return struct
 
 
-def extract_asset(context, base_guid: str, save_callback: Callable[[UnityPy.classes.PPtr, str], None]):
+def extract_asset(context, base_guid: str, save_callback: Callable[[PPtr, str], None]):
     for locale in context.locale_options:
         guid = base_guid
         bundle = context.asset_manifest.base_assets_catalog[guid]
@@ -53,7 +51,7 @@ def extract_sound(context, guid: str, save_dir: Path, prefix: str):
     if not guid:
         return result
     
-    def save(obj: UnityPy.classes.PPtr, locale: str):
+    def save(obj: PPtr, locale: str):
         samples = obj.deref_parse_as_object().samples
         for i, data in enumerate(samples.values(), start=1):
             filename = f'{prefix}_{locale}{i}.wav'
