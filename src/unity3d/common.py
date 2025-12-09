@@ -1,3 +1,4 @@
+import logging
 import os
 from functools import cached_property
 from pathlib import Path
@@ -37,15 +38,17 @@ class CommonUnity3d:
     _instances = {}
     
     def __new__(cls, folder: os.PathLike[str] | str, filename: os.PathLike[str] | str):
-        resolved_path = (Path(folder) / filename).resolve()
+        resolved_path = (Path(folder) / 'Data/Win' / filename).resolve()
         if resolved_path not in cls._instances:
             instance = super().__new__(cls)
             instance._instances[resolved_path] = instance
         return cls._instances[resolved_path]
     
     def __init__(self, folder: os.PathLike[str] | str, filename: os.PathLike[str] | str):
-        self._unity3d_folder = folder
-        self._path = (Path(folder) / filename).resolve().as_posix()
+        unity3d_folder = Path(folder) / 'Data/Win'
+        self._path = (unity3d_folder / filename).resolve().as_posix()
+        self._filename: str = str(filename)
+        self._unity3d_folder = unity3d_folder
     
     @cached_property
     def env(self):
@@ -70,12 +73,15 @@ class CommonUnity3d:
         path_id = game_object['m_Component'][1]['component']['m_PathID']
         return self.path_id[path_id].read_typetree()
     
-    def CardSoundSpell(self, guid: str) -> CardSoundSpellReturnDict:
+    def CardSoundSpell(self, guid: str) -> CardSoundSpellReturnDict | None:
         game_object = self.container[guid].read_typetree()
         path_id = game_object['m_Component'][1]['component']['m_PathID']
         card_sound_spell: CardSoundSpellDict = self.path_id[path_id].read_typetree()
         
         result = {}
+        if 'm_CardSoundData' not in card_sound_spell:
+            logging.info(f'guid {guid} in {self._filename} 不是 CardSoundSpell')
+            return None
         path_id = card_sound_spell['m_CardSoundData']['m_AudioSource']['m_PathID']
         if audio_guid := self._sound_def(path_id):
             result['normal'] = {'guid': audio_guid}
@@ -86,7 +92,6 @@ class CommonUnity3d:
                 audio_guid = self._sound_def(path_id)
                 if not audio_guid:
                     continue
-                import logging
                 specific.append({
                     'guid': audio_guid.split(':')[-1],
                     'condition': {

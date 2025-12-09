@@ -6,16 +6,22 @@
 ## 如何使用
 
 ### 基本用法
+如果你已经安装了python，可以直接运行脚本
 ```bash
-python cli.py [OPTIONS]
+python -m src [OPTIONS]
 ```
+如果你使用的release版本，则
+```bash
+hearth-card-asset [OPTION]
+```
+
 
 ### 参数说明
 
 #### 输入输出参数
 - `--input`：炉石传说资源文件夹路径
   - 默认值：自动检测游戏安装路径
-  - 例如：`--input "C:\Program Files (x86)\Hearthstone\Data"`
+  - 例如：`--input "C:\Program Files (x86)\Hearthstone"`
 
 - `--output`：提取资源的输出文件夹路径
   - 默认值：`./output`
@@ -23,18 +29,48 @@ python cli.py [OPTIONS]
 
 #### 资源类型参数
 - `--image`：要提取的图片类型
-  - 可选值：`all`、`normal`、`signature`、`none`
+  - 可选值：
+    - `all`
+    - `normal`
+    - `signature`
+    - `none`
   - 默认值：`none`
   - 例如：`--image all` 或 `--image normal,signature`
 
 - `--audio`：要提取的音频类型
-  - 可选值：`all`、`additional-play`、`attack`、`death`、`lifetime`、`trigger`、`sub-option`、`reset-game`、`sub-spell`、`none`
+  - 可选值：
+    - `all`
+    - `none`
+    - `additional-play`
+    - `attack`
+    - `death`
+    - `lifetime`
+    - `trigger`
+    - `sub-option`
+    - `reset-game`
+    - `sub-spell`
+    - `emote`
   - 默认值：`none`
   - 例如：`--audio attack,death`
 
 #### 语言参数
 - `--locale`：要提取的语言版本
-  - 可选值：`all`、`enus`、`zhcn`、`zhtw`、`jajp`、`eses`、`kokr`、`ptbr`、`ruru`、`frfr`、`esmx`、`itit`、`dede`、`plpl`、`thth`
+  - 可选值：
+    - `all`
+    - `enus`
+    - `zhcn`
+    - `zhtw`
+    - `jajp`
+    - `eses`
+    - `kokr`
+    - `ptbr`
+    - `ruru`
+    - `frfr`
+    - `esmx`
+    - `itit`
+    - `dede`
+    - `plpl`
+    - `thth`
   - 默认值：`zhcn`
   - 例如：`--locale zhcn,enus`
 
@@ -51,17 +87,17 @@ python cli.py [OPTIONS]
 
 1. 提取所有卡牌的普通图片和攻击音频（中文）：
 ```bash
-python cli.py --image normal --audio attack
+hearth-card-asset --image normal --audio attack
 ```
 
 2. 提取特定卡牌的所有图片和音频（英文）：
 ```bash
-python cli.py --id HERO_01,HERO_02 --image all --audio all --locale enus
+hearth-card-asset --id HERO_01,HERO_02 --image all --audio all --locale enus
 ```
 
 3. 自定义输入输出路径：
 ```bash
-python cli.py --input "C:\Hearthstone\Data" --output ./my_assets --image all
+hearth-card-asset --input "C:\Hearthstone" --output ./my_assets --image all
 ```
 
 ## 使用风险
@@ -72,7 +108,7 @@ python cli.py --input "C:\Hearthstone\Data" --output ./my_assets --image all
 
 ### 安装项目
 ```bash
-uv install .
+uv sync
 ```
 
 ### 执行构建命令

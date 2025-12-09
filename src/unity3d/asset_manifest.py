@@ -11,14 +11,14 @@ class AssetManifest:
     _instances = {}
     
     def __new__(cls, folder: os.PathLike[str] | str):
-        folder = Path(folder).resolve()
+        folder = Path(folder).resolve() / 'Data/Win'
         if folder not in cls._instances:
             instance = super().__new__(cls)
             instance._instances[folder] = instance
         return cls._instances[folder]
     
     def __init__(self, folder: os.PathLike[str] | str):
-        self._unity3d_folder = Path(folder)
+        self._unity3d_folder = Path(folder) / 'Data/Win'
     
     @cached_property
     def _main_env(self):
@@ -44,8 +44,10 @@ class AssetLocaleEntry(TypedDict):
     guid: str
     bundle: str
 
+
 class AssetLocaleMap(TypedDict):
     __root__: dict[str, AssetLocaleEntry]
+
 
 class AssetCatalogLocale:
     def __init__(self, folder: os.PathLike[str] | str):

@@ -22,8 +22,6 @@ def configure_logging(output_path):
         format="%(asctime)s [%(levelname)s] %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S"
     )
-    logger = logging.getLogger(__name__)
-    return logger
 
 
 def get_input() -> Path | None:
@@ -35,7 +33,7 @@ def get_input() -> Path | None:
         key_path = r"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Hearthstone"
         with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, key_path) as key:
             install_location, _ = winreg.QueryValueEx(key, "InstallLocation")
-            return Path(install_location) / 'Data/Win'
+            return Path(install_location)
     except (OSError, FileNotFoundError):
         return None
 
@@ -83,14 +81,13 @@ class HearthstoneExtractContext:
     image_options: tuple[str, ...]
     audio_options: tuple[str, ...]
     locale_options: tuple[str, ...]
-    logger: logging.Logger
 
 
 def parse_args() -> HearthstoneExtractContext:
     parser = argparse.ArgumentParser(description="Hearthstone card asset extractor")
     
     # Add help and version handling
-    parser.add_argument('-v', '--version', action='version', version='%(prog)s 0.1.1')
+    parser.add_argument('-v', '--version', action='version', version='%(prog)s 0.2.0')
     
     # 输入参数
     parser.add_argument(
@@ -145,7 +142,7 @@ def parse_args() -> HearthstoneExtractContext:
         "--audio",
         type=wrap_parse_list_arg(*(args := (
             'additional-play', 'attack', 'death', 'lifetime',
-            'trigger', 'sub-option', 'reset-game', 'sub-spell'
+            'trigger', 'sub-option', 'reset-game', 'sub-spell', 'emote'
         )), name='audio'),
         help=f'Audio types to extract: all, {", ".join(args)}, or none (default: none)',
         default="none"
@@ -157,7 +154,6 @@ def parse_args() -> HearthstoneExtractContext:
         sys.exit(-1)
     args = parser.parse_args()
     
-
     if not args.input.exists() or not args.input.is_dir():
         parser.error(f"Input folder '{args.input}' does not exist or is not a directory.")
     
@@ -165,6 +161,7 @@ def parse_args() -> HearthstoneExtractContext:
         raise argparse.ArgumentTypeError('At least one of --audio or --image must be specified')
     output: Path = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
+    configure_logging(output)
     return HearthstoneExtractContext(
         input_path=(input_path := args.input.resolve()),
         output_path=output,
@@ -172,7 +169,6 @@ def parse_args() -> HearthstoneExtractContext:
         image_options=args.image,
         audio_options=args.audio,
         locale_options=args.locale,
-        logger=configure_logging(output),
         card_ids=(
             tuple(asset_manifest.cards_map.keys())
             if args.id == 'all'

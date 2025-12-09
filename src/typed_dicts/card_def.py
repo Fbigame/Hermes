@@ -23,9 +23,6 @@ class CardDefEffectDefDict(TypedDict, total=False):
     m_SoundSpellPaths: list[str]
 
 
-
-
-
 class CardDefSpellTableOverridesDict(TypedDict, total=False):
     m_Type: Optional[int]
     m_SpellPrefabName: Optional[str]
@@ -51,7 +48,6 @@ class CardDefSpecialEventsDict(TypedDict, total=False):
     m_PremiumPortraitMaterialOverride: Optional[str]
     m_PremiumUberShaderAnimationOverride: Optional[str]
     m_PremiumPortraitTextureOverride: Optional[str]
-
 
 
 class CardDefDict(TypedDict, total=False):

@@ -4,15 +4,10 @@ from typing import Callable
 from UnityPy.classes import PPtr
 
 from unity3d.common import CommonUnity3d
+from utils.helper import Context
 
 
-def get_guid(source: str) -> str | None:
-    if isinstance(source, str) and len(parts := source.split(':')) > 1:
-        return parts[1]
-    return None
-
-
-def extract_asset(context, base_guid: str, save_callback: Callable[[PPtr, str], None]):
+def extract_asset(context: Context, base_guid: str, save_callback: Callable[[PPtr, str], None]):
     for locale in context.locale_options:
         guid = base_guid
         bundle = context.asset_manifest.base_assets_catalog[guid]
