@@ -106,9 +106,8 @@ def extract_audio_list(context: Context, effect_defs: list[CardDefEffectDefDict]
 def extract_audio_emote(
         context: Context,
         effect_defs: list[CardDefEmoteDefsDict],
-        emote_type: dict[int, str] = None,
+        emote_type: dict[int, str],
 ):
-    emote_type = emote_type or {}
     if not effect_defs:
         logging.warning(f'Card({context.card_id}) 不存在音频 emote')
         return

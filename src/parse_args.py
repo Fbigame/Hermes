@@ -87,7 +87,7 @@ def parse_args() -> HearthstoneExtractContext:
     parser = argparse.ArgumentParser(description="Hearthstone card asset extractor")
     
     # Add help and version handling
-    parser.add_argument('-v', '--version', action='version', version='%(prog)s 0.2.0')
+    parser.add_argument('-v', '--version', action='version', version='%(prog)s 0.2.1')
     
     # 输入参数
     parser.add_argument(
