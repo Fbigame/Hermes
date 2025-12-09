@@ -28,6 +28,8 @@ def build():
         "--follow-imports",
         "--output-dir=" + output_dir.as_posix(),
         "--output-filename=" + output_file.as_posix(),
+        "--include-package=UnityPy.resources",
+        "--user-package-configuration-file=hearth-card-asset.nuitka-package.config.yml",
         entry.as_posix()
     ]
     
