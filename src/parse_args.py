@@ -40,11 +40,11 @@ def get_input() -> Path | None:
         return None
 
 
-def warp_parse_list_arg(
+def wrap_parse_list_arg(
         *allow_args: str,
         name: str,
 ) -> Callable[[str], tuple[str, ...]]:
-    def warp(value: str) -> tuple[str, ...]:
+    def wrap(value: str) -> tuple[str, ...]:
         if not value:
             return tuple()
         args = tuple(strip_id for id in value.split(',') if (strip_id := id.strip()))
@@ -70,7 +70,7 @@ def warp_parse_list_arg(
                     raise argparse.ArgumentTypeError(f'Invalid argument: "{arg}" in {name}')
         return args
     
-    return warp
+    return wrap
 
 
 @dataclass
@@ -114,7 +114,7 @@ def parse_args() -> HearthstoneExtractContext:
     # 语言参数
     parser.add_argument(
         "--locale",
-        type=warp_parse_list_arg(*(args := (
+        type=wrap_parse_list_arg(*(args := (
             'enus', 'zhcn', 'zhtw', 'jajp',
             'eses', 'kokr', 'ptbr', 'ruru',
             'frfr', 'esmx', 'itit', 'dede',
@@ -135,7 +135,7 @@ def parse_args() -> HearthstoneExtractContext:
     # 图片参数
     parser.add_argument(
         "--image",
-        type=warp_parse_list_arg(*(args := ('normal', 'signature')), name='image'),
+        type=wrap_parse_list_arg(*(args := ('normal', 'signature')), name='image'),
         help=f'Image types to extract: all, {", ".join(args)}, or none (default: none)',
         default="none"
     )
@@ -143,7 +143,7 @@ def parse_args() -> HearthstoneExtractContext:
     # 音频参数
     parser.add_argument(
         "--audio",
-        type=warp_parse_list_arg(*(args := (
+        type=wrap_parse_list_arg(*(args := (
             'additional-play', 'attack', 'death', 'lifetime',
             'trigger', 'sub-option', 'reset-game', 'sub-spell'
         )), name='audio'),
