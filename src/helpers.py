@@ -1,7 +1,7 @@
-import argparse
 import csv
 import logging
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 from typing import Sequence
 
@@ -9,16 +9,18 @@ from unity3d import AssetManifest
 
 
 @dataclass
-class Context:
+class CardContext:
     input: Path
     output: Path
     asset_manifest: AssetManifest
     locale_options: tuple[str, ...]
     card_id: str
     ensure_ascii: bool
-    gameplay_audio: dict[str, dict[str, str]]
+    enable_sub_struct: bool
+    gameplay_audio: dict[str, dict[str, str]] | None = None
 
 
+@lru_cache(maxsize=1)
 def load_emote_type(input_path: Path):
     import pythonnet
     pythonnet.load()
@@ -37,6 +39,7 @@ def load_emote_type(input_path: Path):
     return {v: n for n, v in zip(names, values)}
 
 
+@lru_cache(maxsize=1)
 def load_strings_gameplay_audio(input_path: Path, locales: Sequence[str]):
     result = {}
     
@@ -49,8 +52,8 @@ def load_strings_gameplay_audio(input_path: Path, locales: Sequence[str]):
             reader = csv.DictReader(f, delimiter='\t')
             for row in reader:
                 # 祖传代码，忘记以前是踩了什么地方的坑要加\x00了
-                tag: str = row['TAG'].replace("\x00", '') # noqa
-                text: str = row['TEXT'].replace("\x00", '') # noqa
+                tag: str = row['TAG'].replace("\x00", '')  # noqa
+                text: str = row['TEXT'].replace("\x00", '')  # noqa
                 result.setdefault(tag, {})[locale] = text
     return result
 

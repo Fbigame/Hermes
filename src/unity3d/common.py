@@ -79,10 +79,10 @@ class CommonUnity3d:
         path_id = game_object['m_Component'][1]['component']['m_PathID']
         card_sound_spell: CardSoundSpellDict = self.path_id[path_id].read_typetree()
         
-        result = {}
         if 'm_CardSoundData' not in card_sound_spell:
             logging.info(f'guid {guid} in {self._filename} 不是 CardSoundSpell')
             return None
+        result = {}
         path_id = card_sound_spell['m_CardSoundData']['m_AudioSource']['m_PathID']
         if audio_guid := self._sound_def(path_id):
             result['normal'] = {'guid': audio_guid}

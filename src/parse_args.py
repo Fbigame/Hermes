@@ -82,6 +82,7 @@ class HearthstoneExtractContext:
     audio_options: tuple[str, ...]
     locale_options: tuple[str, ...]
     ensure_ascii: bool
+    enable_sub_struct: bool
 
 
 def parse_args() -> HearthstoneExtractContext:
@@ -156,6 +157,14 @@ def parse_args() -> HearthstoneExtractContext:
         help="Ensure ASCII encoding for output (default: false)"
     )
     
+    # enable_sub_struct参数
+    parser.add_argument(
+        "--enable_sub_struct",
+        action='store_true',
+        help="Control whether to output struct.json in subfolders (default: false).\n"
+        "Note: The overall struct.json will always be output in the card_id folder regardless of this setting."
+    )
+    
     # 如果没有传任何参数，打印帮助并退出
     if len(sys.argv) == 1:
         parser.print_help()
@@ -178,6 +187,7 @@ def parse_args() -> HearthstoneExtractContext:
         audio_options=args.audio,
         locale_options=args.locale,
         ensure_ascii=args.ensure_ascii,
+        enable_sub_struct=args.enable_sub_struct,
         card_ids=(
             tuple(asset_manifest.cards_map.keys())
             if args.id == 'all'

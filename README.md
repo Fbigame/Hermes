@@ -87,6 +87,11 @@ hearth-card-asset [OPTION]
   - 默认值：`false`（使用 UTF-8 编码）
   - 例如：`--ensure_ascii`
 
+- `--enable_sub_struct`：控制是否在子文件夹输出struct.json
+  - 默认值：`false`（只在card_id文件夹下输出总体的struct.json）
+  - 例如：`--sub_struct`（在card_id文件夹和子文件夹下都输出struct.json）
+  - 注意：无论是否开启此参数，都会在card_id文件夹下输出总体的struct.json
+
 ### 使用示例
 
 1. 提取所有卡牌的普通图片和攻击音频（中文）：
