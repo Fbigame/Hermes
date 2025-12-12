@@ -25,7 +25,8 @@ jobs:
 
       - name: Build
         working-directory: ${{ github.workspace }}
-        run: build
+        run: python path/to/build_script.py
+
 
 
       - name: Upload EXE artifact
